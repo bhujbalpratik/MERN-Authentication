@@ -1,10 +1,13 @@
 import express from "express"
 import MongoConnection from "./data/mongoose.js"
 import { config } from "dotenv"
+import userRouter from "./routers/user.routers.js"
 
-config({ path: "./api/config/.env" })
+config({ path: "./server/config/.env" })
 
 const app = express()
+
+app.use("/api/user", userRouter)
 
 app.get("/", (req, res) => {
   res.send("Home")
