@@ -47,6 +47,7 @@ const Signup = () => {
           placeholder="Username"
           className="bg-slate-100 p-3 rounded-lg"
           onChange={handleChange}
+          required
         />
         <input
           type="email"
@@ -54,6 +55,7 @@ const Signup = () => {
           placeholder="Email"
           className="bg-slate-100 p-3 rounded-lg"
           onChange={handleChange}
+          required
         />
         <input
           type="password"
@@ -61,6 +63,7 @@ const Signup = () => {
           placeholder="Password"
           className="bg-slate-100 p-3 rounded-lg"
           onChange={handleChange}
+          required
         />
         <button
           disabled={loading}
@@ -77,7 +80,7 @@ const Signup = () => {
           <span className="text-blue-500">Sign in</span>
         </Link>
       </div>
-      <p className="text-red-600">{error && "User Already Exist!"}</p>
+      <p className="text-red-600">{error && "Something went wrong!"}</p>
     </div>
   )
 }
