@@ -4,7 +4,7 @@ import { config } from "dotenv"
 import userRouter from "./routers/user.routers.js"
 import authRouter from "./routers/auth.routers.js"
 
-config({ path: "./server/config/.env" })
+config({ path: "./.env" })
 
 const app = express()
 

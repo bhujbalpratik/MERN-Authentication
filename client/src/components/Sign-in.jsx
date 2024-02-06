@@ -6,6 +6,7 @@ import {
   signinSuccess,
   signinFalilure,
 } from "../app/user/userSlice"
+import OAuth from "./OAuth"
 
 const Signin = () => {
   const navigate = useNavigate()
@@ -68,6 +69,7 @@ const Signin = () => {
         >
           {loading ? "Loading..." : "Sign In"}
         </button>
+        <OAuth />
       </form>
 
       <div className="flex gap-2 mt-5">
