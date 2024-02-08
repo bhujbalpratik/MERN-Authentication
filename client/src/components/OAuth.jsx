@@ -6,8 +6,10 @@ import {
   signinFalilure,
 } from "../app/user/userSlice"
 import { app } from "../firebase"
+import { useNavigate } from "react-router-dom"
 const OAuth = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const handleGoogleClick = async () => {
     try {
       const provider = new GoogleAuthProvider()
@@ -25,6 +27,7 @@ const OAuth = () => {
       const data = await res.json()
       console.log(data)
       dispatch(signinSuccess(data))
+      navigate("/")
     } catch (error) {
       console.log("Could not signin with google", error)
     }
