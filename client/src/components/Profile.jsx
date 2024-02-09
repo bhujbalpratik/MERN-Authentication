@@ -15,6 +15,7 @@ import {
   deleteUserStart,
   deleteUserFailure,
   deleteUserSuccess,
+  signOutSuccess,
 } from "../app/user/userSlice"
 
 const Profile = () => {
@@ -87,14 +88,20 @@ const Profile = () => {
         method: "DELETE",
       })
       const data = await res.json()
+      dispatch(signOutSuccess())
 
-      if (data.success === false) {
-        dispatch(deleteUserFailure(data))
-        return
-      }
       dispatch(deleteUserSuccess(data))
     } catch (error) {
       dispatch(deleteUserFailure(error))
+    }
+  }
+
+  const handleSignout = async () => {
+    try {
+      const res = await fetch(`api/auth/signout`)
+      dispatch(signOutSuccess())
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -173,7 +180,10 @@ const Profile = () => {
         >
           Delete account
         </span>
-        <span className="text-red-700 cursor-pointer hover:underline">
+        <span
+          className="text-red-700 cursor-pointer hover:underline"
+          onClick={handleSignout}
+        >
           Sign Out
         </span>
       </div>
