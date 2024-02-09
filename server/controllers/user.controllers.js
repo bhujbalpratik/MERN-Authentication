@@ -11,7 +11,8 @@ export const updateUser = async (req, res, next) => {
     return next(errorHandler(401, "You can update only your account"))
 
   try {
-    if (req.body.password) req.body.password = bcryptjs.hashSync(password, 10)
+    if (req.body.password)
+      req.body.password = bcryptjs.hashSync(req.body.password, 10)
 
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
@@ -20,7 +21,7 @@ export const updateUser = async (req, res, next) => {
           username: req.body.username,
           email: req.body.email,
           password: req.body.password,
-          profilePicture: req.body.password,
+          profilePicture: req.body.profilePicture,
         },
       },
       { new: true }
