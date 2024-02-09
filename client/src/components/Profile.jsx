@@ -12,6 +12,9 @@ import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
+  deleteUserStart,
+  deleteUserFailure,
+  deleteUserSuccess,
 } from "../app/user/userSlice"
 
 const Profile = () => {
@@ -66,7 +69,7 @@ const Profile = () => {
         body: JSON.stringify(formData),
       })
       const data = await res.json()
-      if (data.success == false) {
+      if (data.success === false) {
         dispatch(updateUserFailure(data))
         return
       }
@@ -74,6 +77,24 @@ const Profile = () => {
       setUpdateSuccess(true)
     } catch (error) {
       dispatch(updateUserFailure(error))
+    }
+  }
+
+  const handleDeleteAccount = async () => {
+    dispatch(deleteUserStart())
+    try {
+      const res = await fetch(`api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      })
+      const data = await res.json()
+
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data))
+        return
+      }
+      dispatch(deleteUserSuccess(data))
+    } catch (error) {
+      dispatch(deleteUserFailure(error))
     }
   }
 
@@ -146,8 +167,15 @@ const Profile = () => {
         {updateSuccess && "User updated successfully !"}
       </p>
       <div className="flex justify-between mt-5">
-        <span className="text-red-700 cursor-pointer">Delete account</span>
-        <span className="text-red-700 cursor-pointer">Sign Out</span>
+        <span
+          className="text-red-700 cursor-pointer hover:underline"
+          onClick={handleDeleteAccount}
+        >
+          Delete account
+        </span>
+        <span className="text-red-700 cursor-pointer hover:underline">
+          Sign Out
+        </span>
       </div>
     </div>
   )
