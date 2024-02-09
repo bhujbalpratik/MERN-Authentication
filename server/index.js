@@ -3,12 +3,14 @@ import MongoConnection from "./data/mongoose.js"
 import { config } from "dotenv"
 import userRouter from "./routers/user.routers.js"
 import authRouter from "./routers/auth.routers.js"
+import cookieParser from "cookie-parser"
 
 config({ path: "./.env" })
 
 const app = express()
 
 app.use(express.json())
+app.use(cookieParser())
 app.use("/api/user", userRouter)
 app.use("/api/auth", authRouter)
 app.use((err, req, res, next) => {
