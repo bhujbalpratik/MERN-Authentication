@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import OAuth from "./OAuth"
+import { toast } from "react-hot-toast"
 
 const Signup = () => {
   const [formData, setFormData] = useState({})
@@ -28,13 +29,40 @@ const Signup = () => {
       console.log(data)
       setLoading(false)
       if (data.success == false) {
+        toast.error(data.message, {
+          duration: 3000,
+          style: {
+            background: "#333",
+            borderRadius: "10px",
+            color: "#fff",
+          },
+        })
         setError(true)
         return
+      }
+      if (data) {
+        toast.success(data.message, {
+          duration: 3000,
+          icon: "🤩",
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+        })
       }
       navigate("/")
     } catch (error) {
       setLoading(false)
       setError(true)
+      toast.error(error, {
+        duration: 3000,
+        style: {
+          background: "#333",
+          borderRadius: "10px",
+          color: "#fff",
+        },
+      })
     }
   }
 
@@ -82,7 +110,6 @@ const Signup = () => {
           <span className="text-blue-500">Sign in</span>
         </Link>
       </div>
-      <p className="text-red-600">{error && "Something went wrong!"}</p>
     </div>
   )
 }

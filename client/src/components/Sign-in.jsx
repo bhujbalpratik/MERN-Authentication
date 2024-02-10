@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
+import { toast } from "react-hot-toast"
 import {
   signinStart,
   signinSuccess,
@@ -30,15 +31,39 @@ const Signin = () => {
         body: JSON.stringify(formData),
       })
       const data = await res.json()
-      console.log(data)
-      if (data.success == false) {
+      if (data.success === false) {
         dispatch(signinFalilure(data))
+        toast.error(data.message, {
+          duration: 3000,
+          style: {
+            background: "#333",
+            borderRadius: "10px",
+            color: "#fff",
+          },
+        })
         return
       }
       dispatch(signinSuccess(data))
+      toast.success(`Welcome ,${data.username}`, {
+        duration: 3000,
+        icon: "😎",
+        style: {
+          background: "#333",
+          borderRadius: "10px",
+          color: "#fff",
+        },
+      })
       navigate("/")
     } catch (error) {
       dispatch(signinFalilure(error))
+      toast.error(error, {
+        duration: 3000,
+        style: {
+          background: "#333",
+          borderRadius: "10px",
+          color: "#fff",
+        },
+      })
     }
   }
 
@@ -78,9 +103,6 @@ const Signin = () => {
           <span className="text-blue-500">Sign Up</span>
         </Link>
       </div>
-      <p className="text-red-600">
-        {error ? error.message || "Something went wrong !" : ""}
-      </p>
     </div>
   )
 }

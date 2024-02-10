@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux"
 import { useEffect, useRef, useState } from "react"
+import { AiFillEdit } from "react-icons/ai"
 import {
   getStorage,
   uploadBytesResumable,
@@ -16,15 +17,19 @@ import {
   deleteUserFailure,
   deleteUserSuccess,
   signOutSuccess,
+  editProfile,
 } from "../app/user/userSlice"
 
 const Profile = () => {
-  const { currentUser, loading, error } = useSelector((state) => state.user)
+  const { currentUser, loading, isEditable, error } = useSelector(
+    (state) => state.user
+  )
   const [image, setImage] = useState(undefined)
   const fileRef = useRef(null)
   const [imagePercent, setImagePercent] = useState(0)
   const [imageError, setImageError] = useState(false)
   const [formData, setFormData] = useState({})
+  console.log(formData)
   const [updateSuccess, setUpdateSuccess] = useState(false)
   const dispatch = useDispatch()
 
@@ -88,7 +93,6 @@ const Profile = () => {
         method: "DELETE",
       })
       const data = await res.json()
-      dispatch(signOutSuccess())
 
       dispatch(deleteUserSuccess(data))
     } catch (error) {
@@ -105,6 +109,14 @@ const Profile = () => {
     }
   }
 
+  const EditProfile = () => {
+    dispatch(editProfile(true))
+  }
+
+  const cancelEditProfile = () => {
+    dispatch(editProfile(false))
+  }
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
@@ -119,10 +131,19 @@ const Profile = () => {
         <img
           src={formData.profilePicture || currentUser.profilePicture}
           alt="profile"
-          className="h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2"
-          onClick={() => fileRef.current.click()}
+          className="h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2 relative"
         />
-
+        <button
+          type="button"
+          onClick={() => fileRef.current.click()}
+          className={`self-center  bg-slate-900 rounded-full p-2 text-white hover:opacity-90 ${
+            isEditable ? "flex" : ""
+          }`}
+          hidden={!isEditable}
+        >
+          <AiFillEdit size={"20px"} />
+          &nbsp;Change photo
+        </button>
         <p className="text-sm self-center">
           {imageError ? (
             <span className="text-red-700">
@@ -139,11 +160,12 @@ const Profile = () => {
 
         <input
           type="text"
-          id="usrename"
+          id="username"
           defaultValue={currentUser.username}
           placeholder="Username"
           className="bg-slate-100 rounded-lg p-3"
           onChange={handleChange}
+          readOnly={!isEditable}
         />
         <input
           type="email"
@@ -152,6 +174,7 @@ const Profile = () => {
           placeholder="Email"
           className="bg-slate-100 rounded-lg p-3"
           onChange={handleChange}
+          readOnly={!isEditable}
         />
         <input
           type="password"
@@ -159,20 +182,30 @@ const Profile = () => {
           placeholder="Password"
           className="bg-slate-100 rounded-lg p-3"
           onChange={handleChange}
+          hidden={!isEditable}
         />
         <button
           type="submit"
           disabled={loading}
-          Account
           className="bg-slate-900 text-white p-3 rounded-lg uppercase hover:opacity-90 disabled:opacity-60 disabled:cursor-no-drop"
+          hidden={!isEditable}
         >
           {loading ? "Loading..." : "update"}
+        </button>
+
+        <button
+          type="button"
+          className="bg-slate-900 text-white p-3 rounded-lg uppercase hover:opacity-90 disabled:opacity-60 disabled:cursor-no-drop"
+          onClick={isEditable ? cancelEditProfile : EditProfile}
+        >
+          {isEditable ? "cancel" : "Edit profile"}
         </button>
       </form>
       <p className="text-red-700 mt-5">{error && "Something went wrong ! "}</p>
       <p className="text-green-700 mt-5">
         {updateSuccess && "User updated successfully !"}
       </p>
+
       <div className="flex justify-between mt-5">
         <span
           className="text-red-700 cursor-pointer hover:underline"

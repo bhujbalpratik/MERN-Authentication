@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit"
 const initialState = {
   currentUser: null,
   loading: false,
+  isEditable: false,
   error: false,
 }
 
@@ -12,27 +13,37 @@ const userSlice = createSlice({
   reducers: {
     signinStart: (state) => {
       state.loading = true
+      state.isEditable = false
     },
     signinSuccess: (state, action) => {
       state.currentUser = action.payload
       state.loading = false
       state.error = false
+      state.isEditable = false
     },
     signinFalilure: (state, action) => {
       state.error = action.payload
       state.loading = false
+      state.isEditable = false
+    },
+
+    editProfile: (state, action) => {
+      state.isEditable = action.payload
     },
 
     updateUserStart: (state) => {
       state.loading = true
+      state.isEditable = true
     },
     updateUserSuccess: (state, action) => {
       state.currentUser = action.payload
       state.loading = false
       state.error = false
+      state.isEditable = false
     },
     updateUserFailure: (state, action) => {
       state.error = action.payload
+      state.isEditable = true
       state.loading = false
     },
 
@@ -62,6 +73,7 @@ export const {
   signinFalilure,
   updateUserStart,
   updateUserSuccess,
+  editProfile,
   updateUserFailure,
   deleteUserFailure,
   deleteUserStart,

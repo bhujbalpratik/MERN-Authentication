@@ -6,12 +6,14 @@ import Signin from "./components/Sign-in"
 import Signup from "./components/Sign-up"
 import Header from "./components/Header"
 import PrivateRoute from "./components/PrivateRoute"
+import { Toaster } from "react-hot-toast"
 
 const App = () => {
   return (
     <>
       <Router>
         <Header />
+        <Toaster />
         <Routes>
           <Route path={"/"} element={<Home />} />
           <Route path={"/about"} element={<About />} />
