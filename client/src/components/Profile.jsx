@@ -95,7 +95,7 @@ const Profile = () => {
       // console.log(data)
       if (res.ok) {
         dispatch(updateUserSuccess(data))
-        toast.success(`Profile Update successfully`, {
+        toast.success(`User Updated successfully`, {
           duration: 3000,
           style: {
             background: "#333",
@@ -105,6 +105,14 @@ const Profile = () => {
         })
       } else {
         dispatch(updateUserFailure(data))
+        toast.error(data.message, {
+          duration: 3000,
+          style: {
+            background: "#333",
+            borderRadius: "10px",
+            color: "#fff",
+          },
+        })
       }
     } catch (error) {
       dispatch(updateUserFailure(error))
@@ -112,25 +120,31 @@ const Profile = () => {
   }
 
   const handleDeleteAccount = async () => {
-    dispatch(deleteUserStart())
-    try {
-      const res = await fetch(`api/user/delete/${currentUser._id}`, {
-        method: "DELETE",
-      })
-      const data = await res.json()
+    const result = confirm("Are you sure you want to delete your account?")
+    if (result) {
+      dispatch(deleteUserStart())
+      try {
+        const res = await fetch(`api/user/delete/${currentUser._id}`, {
+          method: "DELETE",
+        })
+        const data = await res.json()
 
-      dispatch(deleteUserSuccess(data))
-    } catch (error) {
-      dispatch(deleteUserFailure(error))
+        dispatch(deleteUserSuccess(data))
+      } catch (error) {
+        dispatch(deleteUserFailure(error))
+      }
     }
   }
 
   const handleSignout = async () => {
-    try {
-      const res = await fetch(`api/auth/signout`)
-      dispatch(signOutSuccess())
-    } catch (error) {
-      console.log(error)
+    const result = confirm("Are you sure you want to log out?")
+    if (result) {
+      try {
+        const res = await fetch(`api/auth/signout`)
+        dispatch(signOutSuccess())
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 
@@ -169,7 +183,7 @@ const Profile = () => {
               </span>
             )}
             {imagePercent > 0 && imagePercent < 100 && (
-              <span className="text-slate-700">{`Uploading ${imagePercent}%`}</span>
+              <span className="text-slate-700">{`Uploading... ${imagePercent}%`}</span>
             )}
           </p>
 
@@ -192,7 +206,7 @@ const Profile = () => {
           <input
             type="password"
             id="password"
-            placeholder="Password"
+            placeholder="Change Password"
             className="bg-slate-100 rounded-lg p-3"
             onChange={handleChange}
           />
@@ -225,7 +239,9 @@ const Profile = () => {
             alt="profile"
             className="h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2 relative"
           />
-
+          <label htmlFor="" className="text-sm font-bold">
+            Username
+          </label>
           <input
             type="text"
             defaultValue={currentUser.username}
@@ -233,6 +249,9 @@ const Profile = () => {
             className="bg-slate-100 rounded-lg p-3"
             readOnly
           />
+          <label htmlFor="" className="text-sm font-bold">
+            Email-id
+          </label>
           <input
             type="email"
             defaultValue={currentUser.email}

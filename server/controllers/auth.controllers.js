@@ -5,6 +5,8 @@ import jwt from "jsonwebtoken"
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body
+  if (username.trim() === "")
+    return next(errorHandler(400, "Username can't be empty"))
   const userEmail = await User.findOne({ email })
   const userName = await User.findOne({ username })
 

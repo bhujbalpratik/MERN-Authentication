@@ -9,6 +9,8 @@ export const test = (req, res) => {
 export const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.id)
     return next(errorHandler(401, "You can update only your account"))
+  if (req.body.username?.trim() === "")
+    return next(errorHandler(400, "Username can't be empty"))
 
   try {
     if (req.body.password)
