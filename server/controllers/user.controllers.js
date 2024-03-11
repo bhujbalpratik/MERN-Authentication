@@ -13,6 +13,14 @@ export const updateUser = async (req, res, next) => {
     return next(errorHandler(400, "Username can't be empty"))
 
   try {
+    if (req.body.username) {
+      let userName = await User.findOne({ username: req.body.username })
+      if (userName) return next(errorHandler(400, "username already taken"))
+    }
+    if (req.body.email) {
+      let userEmail = await User.findOne({ email: req.body.email })
+      if (userEmail) return next(errorHandler(400, "email already taken"))
+    }
     if (req.body.password)
       req.body.password = bcryptjs.hashSync(req.body.password, 10)
 

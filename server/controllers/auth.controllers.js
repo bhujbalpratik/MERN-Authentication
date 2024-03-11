@@ -7,6 +7,7 @@ export const signup = async (req, res, next) => {
   const { username, email, password } = req.body
   if (username.trim() === "")
     return next(errorHandler(400, "Username can't be empty"))
+
   const userEmail = await User.findOne({ email })
   const userName = await User.findOne({ username })
 
@@ -25,7 +26,6 @@ export const signup = async (req, res, next) => {
 
 export const signin = async (req, res, next) => {
   const { email, password } = req.body
-
   try {
     const validUser = await User.findOne({ email })
     if (!validUser) return next(errorHandler(404, "User Not Found"))
@@ -68,6 +68,7 @@ export const google = async (req, res, next) => {
         password: hashedPassword,
         profilePicture: req.body.photo,
       })
+
       await newUser.save()
       const token = jwt.sign({ id: newUser._id }, process.env.SECURITY_KEY)
       const { password: hashedPassword2, ...rest } = newUser._doc

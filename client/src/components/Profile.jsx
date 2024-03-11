@@ -33,8 +33,6 @@ const Profile = () => {
 
   const [username, setUserName] = useState(currentUser.username)
   const [email, setEmail] = useState(currentUser.email)
-  const [password, setPassword] = useState("")
-  const [updateSuccess, setUpdateSuccess] = useState(false)
   const dispatch = useDispatch()
 
   useEffect(() => {
