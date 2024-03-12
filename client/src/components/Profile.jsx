@@ -270,7 +270,9 @@ const Profile = () => {
 
       <p className="text-red-700 mt-5">{error && "Something went wrong ! "}</p>
 
-      <div className="flex justify-between mt-5">
+      <div
+        className={`flex justify-between mt-5 ${isEditable ? "hidden" : ""}`}
+      >
         <span
           className="text-red-700 cursor-pointer hover:underline"
           onClick={handleDeleteAccount}
